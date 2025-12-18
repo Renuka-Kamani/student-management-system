@@ -1,39 +1,29 @@
+from file_handler import load_students, save_students, FIELDNAMES
 
+def input_student():
+    students = load_students()
+    roll = input("Enter Roll No: ").strip()
+    if any(s["Roll_No"] == roll for s in students):
+        print("Duplicate Roll_No!")
+        return None
+    return {
+        "Roll_No": roll,
+        "Name": input("Name: ").strip(),
+        "Branch": input("Branch: ").strip(),
+        "Year": input("Year: ").strip(),
+        "Gender": input("Gender: ").strip(),
+        "Age": input("Age: ").strip(),
+        "Attendance_%": input("Attendance %: ").strip(),
+        "Mid1_Marks": input("Mid1 Marks: ").strip(),
+        "Mid2_Marks": input("Mid2 Marks: ").strip(),
+        "Quiz_Marks": input("Quiz Marks: ").strip(),
+        "Final_Marks": input("Final Marks: ").strip()
+    }
 
-from file_handler import save_students_to_csv, load_students_from_csv
-from models import Student
-def add_new_student():
-    try:
-        roll_no = input("Enter Roll Number: ")
-        name = input("Enter Name: ")
-        age = int(input("Enter Age: "))
-        year = int(input("Enter Year: "))
-        gender = input("Enter Gender: ")
-        mid_1 = int(input("Enter Mid1 Marks: "))
-        mid_2 = int(input("Enter Mid2 Marks: "))
-        final = float(input("Enter Final Marks: "))
-        quiz = float(input("Enter Quiz Marks: "))
-        attendence = float(input("Enter Attendance %: "))
-
-        new_student = Student(
-            attendence=attendence,
-            name=name,
-            roll_no=roll_no,
-            year=year,
-            gender=gender,
-            age=age,
-            mid_1=mid_1,
-            mid_2=mid_2,
-            final=final,
-            quiz=quiz
-        )
-
-        students_list = load_students_from_csv()
-        students_list.append(new_student)
-        save_students_to_csv(students_list)
-        print("Student was added successfully!")
-
-    except ValueError as e:
-        print(f"Error: {e}. Please try again.")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
+def add_student():
+    students = load_students()
+    s = input_student()
+    if s:
+        students.append(s)
+        save_students(students)
+        print("Student added ✅")
